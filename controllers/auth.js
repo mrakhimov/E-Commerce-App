@@ -4,6 +4,8 @@ const router = express.Router();
 //setup email
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+//import userModel
+const userModel = require('../model/user')
 
 //Route for the Customer Registration
 router.get("/register",(req,res)=>{
@@ -65,23 +67,48 @@ router.post("/register", (req,res) => {
      //If the user enters all the data and submit the form, send email and go to dashboard
      else
      {  
-        const msg = {
-          to: form.email,
-          from: 'mokhinur.rakhimov@gmail.com',
-          subject: 'Welcome!',
-          text: 'Welcome to MoonShine!',
-          html: '<strong>High Quality Products. SALE ON NOW!</strong>',
-        };
-        sgMail.send(msg)
-        .then ( ()=> {
-            res.render("dashboard",{
-                title: "Dashboard",
-                user: form.name
-            });
+        /** Save User info to database **/
+        /*
+        Rules for inserting into a MongoDB database USING MONGOOSE is to do the following :
+        1. YOu have to create an instance of the model, you must pass data that you want inserted
+         in the form of an object(object literal)
+        2. From the instance, you call the save method
+        */
+       // 1.
+        const newUser = {
+            name: form.name,
+            email: form.email,
+            password: form.password
+        }
+
+        // 2.
+        const userObj = new userModel(newUser);
+        userObj.save()
+        .then(()=> {
+           
         })
         .catch(err => {
-            console.log(`${err}`);
-        })
+            console.log(`Error on saving to database: ${err}`);
+        });
+
+        const msg = {
+            to: form.email,
+            from: 'mokhinur.rakhimov@gmail.com',
+            subject: 'Welcome!',
+            text: 'Welcome to MoonShine!',
+            html: '<strong>High Quality Products. SALE ON NOW!</strong>',
+          };
+          sgMail.send(msg)
+          .then ( ()=> {
+              res.render("dashboard",{
+                  title: "Dashboard",
+                  user: form.name
+              });
+          })
+          .catch(err => {
+              console.log(`Error on sending email: ${err}`);
+          })            
+        
      }
 });
 
