@@ -94,10 +94,7 @@ router.post("/register", (req,res) => {
               };
               sgMail.send(msg)
               .then ( ()=> {
-                  res.render("dashboard",{
-                      title: "Dashboard",
-                      user: form.name
-                  });
+                  res.redirect("/dashboard");
               })
               .catch(err => {
                   console.log(`Error on sending email: ${err}`);
