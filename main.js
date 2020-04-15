@@ -2,6 +2,8 @@
 const express = require("express");
 const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
 //creation of app object
 const app = express();
 
@@ -16,6 +18,14 @@ app.use(bodyParser.urlencoded({ extended: false }))
 //loading static assests middleware
 app.use(express.static("public"));
 
+// connect to database
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopology: true})
+.then( ()=> {
+    console.log("Connected to Database");
+})
+.catch(err => {
+    console.log(`Error occured when connecting to database: ${err}`);
+})
 
 
 // load controllers
