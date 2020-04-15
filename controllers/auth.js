@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcryptjs");
+//import userModel
+const userModel = require('../model/user')
 
 //setup email
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
-//import userModel
-const userModel = require('../model/user')
+
 
 //Route for the Customer Registration
 router.get("/register",(req,res)=>{
@@ -120,45 +122,79 @@ router.get("/login",(req,res)=>{
 // Handle the post data
 router.post("/login", (req,res) => {
     
-    // error messages
-    const errorMessages = {};
-
-    // fields value holder
-    let form = {
-        email : req.body.email,
-        password: req.body.password
-    };
+        // error messages
+        const errorMessages = {};
 
 
-    // validation
-    if(req.body.email=="") {
-        errorMessages.login = "You must enter e-mail";
-    }
-    if(req.body.password=="") {
-        errorMessages.password = "You must enter password";
-    }
+        // fields value holder
+        let form = {
+            email : req.body.email,
+            password: req.body.password
+        };
 
-     //If the user does not enter all the information
-     if(errorMessages.password != null || errorMessages.login != null)
-     {
-             res.render("login",{
-                     title:"Login",
-                     errors : errorMessages,
-                     retain: form
-             });
-     }
-     //If the user enters all the data and submit the form
-     else
-     {  
-            res.render("login",{
-            title:"Login",
-            successMessage :`Thank you, we received your information and will contact you shortly` ,
-            retain: form
-          });    
 
-     }
+        // validation
+        if(req.body.email=="") {
+            errorMessages.login = "You must enter e-mail";
+        }
+        if(req.body.password=="") {
+            errorMessages.password = "You must enter password";
+        }
+
+        //If the user does not enter all the information
+        if(errorMessages.password != null || errorMessages.login != null)
+        {
+                res.render("login",{
+                        title:"Login",
+                        errors : errorMessages,
+                        retain: form
+                });
+        }
+        //If the user enters all the data and submit the form
+        else
+        {  
+            /**TODO: Session based authentication */
+            userModel.findOne({email:form.email})
+            .then((user)=>{
+                //there was no matching email
+                if(user==null)
+                {
+                    errorMessages.login = "Sorry your email was not found in our database";
+                    res.render("login",{
+                        title:"Login",
+                        errors : errorMessages,
+                        retain: form
+                });
+                }
+                //There is a matching email
+                else
+                {
+                    bcrypt.compare(form.password,user.password)
+                    .then((isMatched)=>{
+                        //password match
+                        if(isMatched==true)
+                        {
+                            req.session.user=user;
+                            res.redirect("/dashboard");
+                        }
+                        //no match
+                        else
+                        {
+                            errorMessages.password = "Sorry your password was wrong!";
+                            res.render("login",{
+                                title:"Login",
+                                errors : errorMessages,
+                                retain: form
+                        });
+                        }
+
+                    })
+                    .catch(err=>console.log(`Error ${err}`));
+                 }
+            })
+            .catch(err=>console.log(`Error ${err}`));
+
+        }
 });
-
-
 
 module.exports = router;

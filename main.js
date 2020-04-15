@@ -3,6 +3,7 @@ const express = require("express");
 const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 //creation of app object
 const app = express();
@@ -27,6 +28,18 @@ mongoose.connect(process.env.MONGODB_CONNECTION_STRING, {useNewUrlParser: true, 
     console.log(`Error occured when connecting to database: ${err}`);
 })
 
+// Session middleware
+app.use(session({secret: `${process.env.SESSION_SECRET}` , resave: false,saveUninitialized: true}))
+//custom middleware functions
+app.use((req,res,next)=>{
+
+    //res.locals.user is a global handlebars variable. This means that ever single handlebars file can access 
+    //that user variable
+    res.locals.user = req.session.user;
+    next();
+});
+
+
 
 // load controllers
 const generalController = require("./controllers/general");
@@ -37,6 +50,8 @@ const productsConroller = require("./controllers/products");
 app.use("/", generalController);
 app.use("/products", productsConroller);
 app.use("/auth", authController);
+
+
 
 const PORT = process.env.PORT;
 app.listen(PORT,()=>{
