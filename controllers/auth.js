@@ -3,6 +3,8 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 //import userModel
 const userModel = require('../model/user')
+const isAuthenticated = require("../middleware/authentication");
+const dashBoardLoader = require("../middleware/authorization");
 
 //setup email
 const sgMail = require('@sendgrid/mail');
@@ -96,7 +98,8 @@ router.post("/register", (req,res) => {
               };
               sgMail.send(msg)
               .then ( ()=> {
-                  res.redirect("/dashboard");
+                    req.session.user=userObj;
+                    res.redirect("/dashboard");
               })
               .catch(err => {
                   console.log(`Error on sending email: ${err}`);
@@ -119,7 +122,7 @@ router.get("/login",(req,res)=>{
 
 });
 
-// Handle the post data
+// Handle the login post data
 router.post("/login", (req,res) => {
     
         // error messages
@@ -196,5 +199,13 @@ router.post("/login", (req,res) => {
 
         }
 });
+
+// Handle logout
+router.get("/logout",(req,res)=>{
+
+    req.session.destroy();
+    res.redirect("/auth/login")
+    
+})
 
 module.exports = router;

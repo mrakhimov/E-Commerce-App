@@ -9,7 +9,7 @@ router.get("/list",(req,res)=>{
     res.render("products",{
         title:"Products",
         headingInfo: "Products",
-        products : productModel.getAllproducts(),
+        products : productsModel.getAllproducts(),
     });
 
 });

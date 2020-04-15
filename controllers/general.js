@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const isAuthenticated = require("../middleware/authentication");
+const dashBoardLoader = require("../middleware/authorization");
 
+//import userModel
+const userModel = require('../model/user')
 const categoryModel = require("../model/categories");
 const bestsellerModel = require("../model/bestsellers");
 
@@ -17,17 +21,6 @@ router.get("/",(req,res)=>{
 });
 
 // Handle dashboard only if authenticated
-router.get("/dashboard",(req,res)=>{
-    /* TODO: Pull user data from the database and render the results in a dashboard */
-    /*userModel.find()
-    .then( (data) => {
-
-    })     
-    .catch( err => {
-        console.log(`Error retrieving data from a database: ${err}`);
-    })
-    */
-    res.render("dashboard");
-});
+router.get("/dashboard",isAuthenticated,dashBoardLoader);
 
 module.exports = router;
