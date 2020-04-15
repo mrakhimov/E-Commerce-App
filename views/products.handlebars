@@ -1,0 +1,16 @@
+<section id="products">
+        <h2>Inventory</h2>
+        <div class="products-class">
+             {{#each products}}
+             <div class="products-box">
+                <p>{{this.name}}</p>
+                <h5>{{this.category}}</h5>
+                <h6>{{this.description}}</h6>
+                <span>
+                    <a href="{{this.link}}"><img src="{{this.thumb}}" width="300px" height="300px"></a>
+                </span>
+                <p id="price">{{this.price}}</p>
+             </div>
+            {{/each}}   
+        </div>
+    </section>
