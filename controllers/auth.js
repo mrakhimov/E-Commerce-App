@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+//setup email
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+
 //Route for the Customer Registration
 router.get("/register",(req,res)=>{
 

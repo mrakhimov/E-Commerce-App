@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 //creation of app object
 const app = express();
 
-const sgMail = require('@sendgrid/mail');
+
 // load env variable file
 require('dotenv').config({path:"./config/keys.env"});
 //handlebars middleware
@@ -15,8 +15,7 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: false }))
 //loading static assests middleware
 app.use(express.static("public"));
-//setup email
-sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
+
 
 
 // load controllers
