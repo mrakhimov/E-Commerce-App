@@ -65,8 +65,6 @@ router.post("/register", (req,res) => {
      //If the user enters all the data and submit the form, send email and go to dashboard
      else
      {  
-        
-        
         const msg = {
           to: form.email,
           from: 'mokhinur.rakhimov@gmail.com',
