@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require("bcryptjs");
 
 const userSchema = new Schema({
    
@@ -34,7 +35,7 @@ const userSchema = new Schema({
   */
 
 
-/*userSchema.pre("save",function(next)
+userSchema.pre("save",function(next)
 {
 
     //salt random generated characters or strings
@@ -54,7 +55,7 @@ const userSchema = new Schema({
 
 
 })
-*/
+
  const userModel = mongoose.model('User', userSchema);
 
  module.exports = userModel;

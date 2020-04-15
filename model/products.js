@@ -1,3 +1,58 @@
+/*const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const products = new Schema({
+   
+    name:
+    {
+        type:String,
+        required:true
+    },
+
+    description:
+    {
+        type:String,
+        required:true,
+    },
+    category:
+    {
+        type:String,
+        required:true,
+    },
+    thumb:
+    {
+        type:String,
+        required:true,
+    },
+    price:
+    {
+        type:Number,
+        required:true
+    },
+    bestseller:
+    {
+        type:Booelan,
+        required:true
+    },
+    link:
+    {
+        type:String,
+        required:true
+    },
+    dateCreated:
+    {
+        type:Date,
+        default:Date.now()
+    }
+  });
+
+
+  const productsModel = mongoose.model('products', productsSchema);
+
+  module.exports = productsModel;
+
+*/
+
 const products =
 {
     fakeDB:[],
