@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+const categoryModel = require("../model/categories");
+const bestsellerModel = require("../model/bestsellers");
+
 //Route for the Home Page
 router.get("/",(req,res)=>{
 
@@ -12,3 +15,5 @@ router.get("/",(req,res)=>{
     });
 
 });
+
+module.exports = router;
