@@ -85,30 +85,28 @@ router.post("/register", (req,res) => {
         const userObj = new userModel(newUser);
         userObj.save()
         .then(()=> {
-           
+            const msg = {
+                to: form.email,
+                from: 'mokhinur.rakhimov@gmail.com',
+                subject: 'Welcome!',
+                text: 'Welcome to MoonShine!',
+                html: '<strong>High Quality Products. SALE ON NOW!</strong>',
+              };
+              sgMail.send(msg)
+              .then ( ()=> {
+                  res.render("dashboard",{
+                      title: "Dashboard",
+                      user: form.name
+                  });
+              })
+              .catch(err => {
+                  console.log(`Error on sending email: ${err}`);
+              })         
         })
         .catch(err => {
             console.log(`Error on saving to database: ${err}`);
         });
 
-        const msg = {
-            to: form.email,
-            from: 'mokhinur.rakhimov@gmail.com',
-            subject: 'Welcome!',
-            text: 'Welcome to MoonShine!',
-            html: '<strong>High Quality Products. SALE ON NOW!</strong>',
-          };
-          sgMail.send(msg)
-          .then ( ()=> {
-              res.render("dashboard",{
-                  title: "Dashboard",
-                  user: form.name
-              });
-          })
-          .catch(err => {
-              console.log(`Error on sending email: ${err}`);
-          })            
-        
      }
 });
 
