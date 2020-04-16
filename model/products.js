@@ -38,6 +38,11 @@ const productsSchema = new Schema({
         type:String,
         default: `#`
     },
+    quantity:
+    {
+        type: Number,
+        default: 1
+    },
     dateCreated:
     {
         type:Date,

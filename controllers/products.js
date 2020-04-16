@@ -52,7 +52,8 @@ router.post("/add",isAuthenticated,(req,res)=>
         category : req.body.category,
         description : req.body.description,
         price : req.body.price,
-        bestseller : req.body.bestseller == 'true'
+        bestseller : req.body.bestseller == 'true',
+        quantity: req.body.quantity
     }
 
     /*
