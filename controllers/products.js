@@ -186,6 +186,33 @@ router.put("/edit/:id",(req,res)=>{
 
 });
 
+//Route to direct user to edit a particular product
+router.get("/details/:id",(req,res)=>{
+
+    productsModel.findById(req.params.id)
+    .then((product)=>{
+
+        const {_id,thumb,link,dateCreated,name, category, description, price, quantity, bestseller} = product;
+        res.render("products-details",{
+            _id,
+            name,
+            description,
+            category,
+            thumb, 
+            price, 
+            bestseller, 
+            link, 
+            quantity
+        })
+
+    })
+    .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+
+
+});
+
+
+
 router.delete("/delete/:id",(req,res)=>{
     
     productsModel.deleteOne({_id:req.params.id})
