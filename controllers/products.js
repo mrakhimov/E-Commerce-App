@@ -25,13 +25,72 @@ router.get("/list",(req,res)=>{
         });
 
         res.render("products",{
-           products : filteredItems
+           data : filteredItems
         });
 
     })
     .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
 
 });
+
+// Search functionality
+router.post("/list", (req,res) => {
+    if (req.body.category == "all") {
+        productsModel.find()
+        .then((products)=>{
+            //Filter out the information that you want from the array of documents that was returned into
+            //a new array
+            //Array 300 documents meaning that the array has 300 elements 
+            const filteredItems =  products.map(item=>{
+                    return {
+                        id: item._id,
+                        name: item.name,
+                        description:item.description,
+                        category : item.category,
+                        price : item.price,
+                        bestseller: item.bestseller,
+                        link: item.link,
+                        thumb: item.thumb,
+                        quantity: item.quantity
+                    }
+            });
+    
+            res.render("products",{
+               data : filteredItems
+            });
+    
+        })
+        .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+    }
+    else {
+        productsModel.find({category: req.body.category})
+        .then((products)=>{
+            //Filter out the information that you want from the array of documents that was returned into
+            //a new array
+            //Array 300 documents meaning that the array has 300 elements 
+            const filteredItems =  products.map(item=>{
+                    return {
+                        id: item._id,
+                        name: item.name,
+                        description:item.description,
+                        category : item.category,
+                        price : item.price,
+                        bestseller: item.bestseller,
+                        link: item.link,
+                        thumb: item.thumb,
+                        quantity: item.quantity
+                    }
+            });
+    
+            res.render("products",{
+               data : filteredItems
+            });
+    
+        })
+        .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+    }
+});
+
 //Route to direct use to Add Products form
 router.get("/add",isAuthenticated,(req,res)=>
 {
