@@ -4,8 +4,19 @@
 	<p>Role: {{user.role}}</p>
 	<h2>Here's what we have in the inventory</h2>
 
-    <button type="button" style="align:center"><a href="/products/add">Add Product</a></button>
+   
 
+    <form method="POST" action="/dashboard">
+        <label>Search By</label>
+        <select name="category">
+                <option selected value="Women's Fashion">All</option>
+                <option value="Women's Fashion">Women's Fashion</option>
+                <option  value="Beauty">Beauty</option>
+                <option value="Jewellery">Jewellery</option>
+                <option value="Watches">Watches</option>
+        </select>
+        <input type="submit" value="Search">
+     </form> <br><br>
 
 	<table border="1" style="text-align: center;">
         <thead>
@@ -60,4 +71,6 @@
                 {{/each}}
     </tbody>
     </table>
+
+     <button type="button" style="align:center"><a href="/products/add">Add Product</a></button>
 </section>
