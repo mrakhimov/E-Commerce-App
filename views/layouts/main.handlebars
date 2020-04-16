@@ -24,16 +24,22 @@
                 <li>
                     <a href="/products/list">Products</a>
                 </li>
-                {{#if user }}
+                {{#if user.isClerk }}
+                     <li><a href="/products/add">Add Product</a></li>
                     <li><a href="/dashboard">Dashboard</a></li>
                      <li><a href="/auth/logout">Logout</a></li>
                 {{else}}
-                <li>
-                    <a href="/auth/register">Register</a>
-                </li>
-                <li>
-                    <a href="/auth/login">Login</a>
-                </li>
+                    {{#if user.isRegular}}
+                        <li><a href="/dashboard">Dashboard</a></li>
+                        <li><a href="/auth/logout">Logout</a></li>
+                    {{else}}
+                        <li>
+                            <a href="/auth/register">Register</a>
+                        </li>
+                        <li>
+                            <a href="/auth/login">Login</a>
+                        </li>
+                    {{/if}}
                 {{/if}}
             </ul>
             </nav>

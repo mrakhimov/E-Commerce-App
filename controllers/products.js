@@ -35,7 +35,14 @@ router.get("/list",(req,res)=>{
 //Route to direct use to Add Products form
 router.get("/add",isAuthenticated,(req,res)=>
 {
-    res.render("products-add");
+    if (req.session.user.role=="Clerk") {
+        res.render("products-add");
+    }
+    else {
+        res.redirect("list");
+    }
+    
+    
 });
 //Route to process user's request and data when the user submits the add task form
 router.post("/add",isAuthenticated,(req,res)=>
