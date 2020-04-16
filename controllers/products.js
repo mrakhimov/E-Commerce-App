@@ -44,7 +44,7 @@ router.get("/add",isAuthenticated,(req,res)=>
     
     
 });
-//Route to process user's request and data when the user submits the add task form
+//Route to process user's request and data when the user submits the add form
 router.post("/add",isAuthenticated,(req,res)=>
 {
     const newProduct = {
@@ -67,7 +67,6 @@ router.post("/add",isAuthenticated,(req,res)=>
      product.save()
      .then(()=>{
         req.files.productPic.name = `${product._id}${path.parse(req.files.productPic.name).ext}`;
-        console.log(req.files.productPic.name);
         req.files.productPic.mv(`./public/img/${req.files.productPic.name}`)
         .then(()=>{
             productsModel.updateOne({_id:product._id},{
@@ -80,6 +79,62 @@ router.post("/add",isAuthenticated,(req,res)=>
         })
      })
      .catch(err=>console.log(`Error happened when inserting in the database :${err}`));
+});
+
+//Route to direct user to edit a particular product
+router.get("/edit/:id",(req,res)=>{
+
+    productsModel.findById(req.params.id)
+    .then((product)=>{
+
+        const {_id,thumb,link,dateCreated,name, category, description, price, quantity, bestseller} = product;
+        res.render("products-edit",{
+            _id,
+            name,
+            description,
+            category,
+            thumb, 
+            price, 
+            bestseller, 
+            link, 
+            quantity
+        })
+
+    })
+    .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+
+
+});
+
+router.put("/edit/:id",(req,res)=>{
+
+    const newProduct = {
+        name : req.body.name,
+        category : req.body.category,
+        description : req.body.description,
+        price : req.body.price,
+        bestseller : req.body.bestseller == 'true',
+        quantity: req.body.quantity
+    }
+
+
+   productsModel.updateOne({_id:req.params.id},newProduct)
+   .then(()=>{
+       res.redirect("/dashboard");
+   })
+   .catch(err=>console.log(`Error happened when updating data from the database :${err}`));
+
+
+});
+
+router.delete("/delete/:id",(req,res)=>{
+    
+    productsModel.deleteOne({_id:req.params.id})
+    .then(()=>{
+        res.redirect("/dashboard");
+    })
+    .catch(err=>console.log(`Error happened when deleting data from the database :${err}`));
+
 });
 
 module.exports = router;

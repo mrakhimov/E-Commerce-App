@@ -20,7 +20,8 @@ const dashBoardLoader = (req,res)=>{
                         price : item.price,
                         bestseller: item.bestseller,
                         link: item.link,
-                        thumb: item.thumb
+                        thumb: item.thumb,
+                        quantity: item.quantity
                     }
             });
     

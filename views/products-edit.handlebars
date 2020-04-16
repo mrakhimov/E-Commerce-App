@@ -1,16 +1,14 @@
-<section id="products-add">
+<section id="products-edit">
 
-   
-
-    <form method="POST" action="/products/add" enctype="multipart/form-data">
-     <h2> Add New Product </h2>
+    <form method="POST" action="/products/edit/{{_id}}?method=PUT" enctype="multipart/form-data">
+     <h2> Edit {{name}} </h2>
         <p>
             <label class="floatLabel">Name</label>
-            <input type="text" name="name" id="name">
+            <input type="text" name="name" id="name" value={{name}}>
         </p>
         <p>
             <label class="floatLabel">Description</label>
-            <input type="text" id="description" name="description">
+            <input type="text" id="description" name="description" value={{description}}>
         </p>
         <p>
             <label class="floatLabel">Category</label><br>
@@ -23,11 +21,11 @@
         </p>
         <p>
             <label class="floatLabel">Price</label>
-            <input type="text" name="price" id="price">
+            <input type="text" name="price" id="price" value={{price}}>
         </p>
         <p>
             <label class="floatLabel">Quantity</label>
-            <input type="text" name="quantity" id="quantity">
+            <input type="text" name="quantity" id="quantity" value={{quantity}}>
         </p>
         <p>
              <label class="floatLabel">Bestseller</label><br>
@@ -37,11 +35,11 @@
             </select>
         </p>
         <p>
-             <label class="floatLabel">Photo</label><br>
-            <input type="file" name="productPic" id="productPic">
+            <label class="floatLabel">Photo</label><br>
+            <input type="file" name="productPic" id="productPic" required>
         </p>
         <p>
-            <input type="submit" value="Add Product">
+            <input type="submit" value="Edit Product">
         </p>
 
     </form>
