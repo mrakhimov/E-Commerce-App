@@ -1,0 +1,46 @@
+<section id="register">
+
+   
+
+    <form method="POST" action="/products/add" enctype="multipart/form-data">
+     <h2> Create new Product </h2>
+        <p>
+            <label class="floatLabel">Name</label>
+            <input type="text" name="name" id="name">
+        </p>
+        <p>
+            <label class="floatLabel">Description</label>
+            <input type="text" id="description" name="description">
+        </p>
+        <p>
+            <label class="floatLabel">Category</label><br>
+            <select name="category">
+                <option value="Women's Fashion">Women's Fashion</option>
+                <option value="Beauty">Beauty</option>
+                <option value="Jewellery">Jewellery</option>
+                <option value="Watches">Watches</option>
+            </select>
+        </p>
+        <p>
+            <label class="floatLabel">Price</label>
+            <input type="text" name="price" id="price">
+        </p>
+        <p>
+             <label class="floatLabel">Bestseller</label><br>
+            <select name="bestseller">
+                <option value="true">Yes</option>
+                <option selected value="false">No</option>
+            </select>
+        </p>
+        <p>
+             <label class="floatLabel">Photo</label><br>
+            <input type="file" name="productPic" id="productPic">
+        </p>
+        <p>
+            <input type="submit" value="Add Product">
+        </p>
+
+    </form>
+
+</section>
+

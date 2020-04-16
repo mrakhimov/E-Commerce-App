@@ -4,6 +4,7 @@ const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const fileUpload = require('express-fileupload');
 
 //creation of app object
 const app = express();
@@ -38,6 +39,24 @@ app.use((req,res,next)=>{
     res.locals.user = req.session.user;
     next();
 });
+app.use((req,res,next)=>{
+
+    if(req.query.method=="PUT")
+    {
+        req.method="PUT"
+    }
+
+    else if(req.query.method=="DELETE")
+    {
+        req.method="DELETE"
+    }
+
+    next();
+})
+
+
+app.use(fileUpload());
+
 
 
 
