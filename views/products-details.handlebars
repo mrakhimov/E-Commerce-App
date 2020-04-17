@@ -8,12 +8,25 @@
         </span>
         <p id="price">${{this.price}}</p>
         <p id="quantity">In Stock: {{this.quantity}}</p>
-         <select name="quantity">
-             {{#each qty}}
+         
+        <form method="POST" action="/cart/{{_id}}?method=PUT">
+        <select name="quantity">
                 <label class="floatLabel">Quantity</label><br>
-                <option value={{this}}>{{this}}</option>
-            {{/each}}
+                <option selected value=1>1</option>
+                <option value=2>2</option>
+                <option value=3>3</option>
+                <option value=4>4</option>
+                <option value=5>5</option>
+                <option value=6>6</option>
+                <option value=7>7</option>
+                <option value=8>8</option>
+                <option value=9>9</option>
+                <option value=10>10</option>
         </select>
-        <button>Add to cart</button>
+            <p>
+                <input type="submit" value="Add to Cart">
+            </p>
+        </form>
+      
     </div>
 </section>

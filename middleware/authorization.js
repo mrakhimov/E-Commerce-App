@@ -11,7 +11,7 @@ const dashBoardLoader = (req,res)=>{
             //Filter out the information that you want from the array of documents that was returned into
             //a new array
             //Array 300 documents meaning that the array has 300 elements 
-            const filteredItems =   products.map(item=>{
+            const filteredItems =  products.map(item=>{
                     return {
                         id: item._id,
                         name: item.name,

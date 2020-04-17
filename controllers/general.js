@@ -7,6 +7,7 @@ const dashBoardLoader = require("../middleware/authorization");
 
 const categoryModel = require("../model/categories");
 const productsModel = require("../model/products");
+const cartModel = require("../model/cart");
 //Route for the Home Page
 router.get("/",(req,res)=>{
     productsModel.find({ bestseller: true })
@@ -100,5 +101,90 @@ router.post("/dashboard", isAuthenticated, (req,res) => {
 
     
 });
+
+// Handle add to cart
+router.put("/cart/:id", isAuthenticated, (req,res) => {
+    // If cart is not empty
+    if(!req.session.cart) {
+        productsModel.findById(req.params.id)
+        .then((product)=>{
+            product.price = product.price * Number(req.body.quantity);
+            let newCart = {
+                products: [],
+                products_qty: [],
+                userid: req.session.user._id,
+                username : req.session.user.name,
+                useremail: req.session.user.email,
+                total_amount: product.price,
+                total_items: Number(req.body.quantity) ,
+            };
+
+            newCart.products.push(product);
+            newCart.products_qty.push(Number(req.body.quantity));
+            const cartObj = new cartModel(newCart);
+            cartObj.save()
+            .then(()=> {
+                req.session.cart=cartObj;
+                res.redirect("/cart");
+            })
+            .catch(err => {
+                console.log(`Error on saving to database: ${err}`);
+            });
+        })
+        .catch(err=>console.log(`Error happened when pulling from the database :${err}\n\n`));
+    }
+    // Update existing cart
+    else {
+        let quantity_added_to_cart = Number(req.body.quantity);
+        let total_price_on_the_cart = 0;
+        let total_items_on_the_cart = 0;
+        productsModel.findById(req.params.id)
+        .then((product)=>{
+            let product_price = product.price;
+
+            product.price = product_price * Number(req.body.quantity);
+
+            cartModel.findById(req.session.cart._id)
+            .then((cart) => {
+                total_items_on_the_cart = cart.total_items;
+                total_items_on_the_cart += quantity_added_to_cart;
+                total_price_on_the_cart = cart.total_amount;
+                total_price_on_the_cart += (product_price * quantity_added_to_cart);
+                cartModel.updateOne({_id:req.session.cart._id}, { 
+                    $set: {  total_items: total_items_on_the_cart, total_amount: total_price_on_the_cart },
+                    $push: { products: product, products_qty:quantity_added_to_cart}
+                })
+                .then(()=>{
+                    res.redirect("/cart");
+                })
+                .catch(err=>console.log(`Error happened when updating data from the database :${err}`));
+            }).catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+           
+        })
+        .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+    }
+});
+
+router.get("/cart", isAuthenticated, (req,res) => {
+    if(!req.session.cart) {
+        const err = "Your cart is empty";
+        res.render("cart", {
+            err
+        });
+    }
+    else {
+        cartModel.findOne({userid: req.session.user._id})
+        .then((cart)=>{
+            let {products, products_qty, total_items, total_amount } = cart;
+            res.render("cart", {
+                products, products_qty, total_items, total_amount
+            });
+        })
+        .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+    }
+    
+});
+
+
 
 module.exports = router;

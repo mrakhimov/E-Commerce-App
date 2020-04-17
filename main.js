@@ -37,6 +37,7 @@ app.use((req,res,next)=>{
     //res.locals.user is a global handlebars variable. This means that ever single handlebars file can access 
     //that user variable
     res.locals.user = req.session.user;
+    res.locals.cart = req.session.cart;
     next();
 });
 app.use((req,res,next)=>{
@@ -59,7 +60,6 @@ app.use(fileUpload());
 
 
 
-
 // load controllers
 const generalController = require("./controllers/general");
 const authController = require("./controllers/auth");
@@ -69,7 +69,6 @@ const productsConroller = require("./controllers/products");
 app.use("/", generalController);
 app.use("/products", productsConroller);
 app.use("/auth", authController);
-
 
 
 const PORT = process.env.PORT;

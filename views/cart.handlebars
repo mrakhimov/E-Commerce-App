@@ -1,0 +1,27 @@
+<section id="checkout">
+    <h1>Shopping Cart</h1>
+    <h2>{{err}}</h2>
+  
+    {{#if products}}
+            {{#each products}}
+                <div class="products-box">
+                    <p>{{this.name}}</p>
+                    <h5>{{this.category}}</h5>
+                    <h6>{{this.description}}</h6>
+                    <span>
+                        <a href="{{this.link}}"><img src="/img/{{this.thumb}}" width="500px" height="500px"></a>
+                    </span>
+                    <p id="price">${{this.price}}</p>
+                    <p id="qty">Quantity added:   {{#with (lookup ../products_qty @index)}} {{this}} {{/with}}</p>
+                </div>
+            {{/each}}
+        <h3> Total items: {{total_items}}</h3>
+        <h3> Your total is : {{total_amount}}</h3>
+
+        <a href="#"><button>Place your Order</button></a>
+    {{/if}}
+
+    
+    
+</section>
+

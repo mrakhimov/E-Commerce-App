@@ -193,10 +193,7 @@ router.get("/details/:id",(req,res)=>{
     .then((product)=>{
 
         const {_id,thumb,link,dateCreated,name, category, description, price, quantity, bestseller} = product;
-        let qty = [];
-        for(i=0; i<quantity; i++) {
-            qty[i] = i+1;
-        }
+      
         res.render("products-details",{
             _id,
             name,
@@ -207,7 +204,6 @@ router.get("/details/:id",(req,res)=>{
             bestseller, 
             link, 
             quantity,
-            qty
         })
 
     })

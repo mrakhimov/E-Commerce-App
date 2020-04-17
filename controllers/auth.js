@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 //import userModel
 const userModel = require('../model/user')
+const cartModel = require('../model/cart')
 const isAuthenticated = require("../middleware/authentication");
 const dashBoardLoader = require("../middleware/authorization");
 
@@ -202,6 +203,11 @@ router.post("/login", (req,res) => {
 
 // Handle logout
 router.get("/logout",(req,res)=>{
+
+
+    // Cleanup cart
+    cartModel.deleteMany({userid: req.session.user._id})
+    .catch(err=>console.log(`Error happened when deleting data from the database :${err}`));
 
     req.session.destroy();
     res.redirect("/auth/login");
