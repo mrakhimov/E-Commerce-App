@@ -234,7 +234,7 @@ body h1 {
   background: ffbac4;
   text-shadow: 0 1px 3px #ffbac4;
 }
-form label {
+#register form label, #login form label {
   position: absolute;
   left: 8px;
   top: 12px;
