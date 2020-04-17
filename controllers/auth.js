@@ -179,7 +179,7 @@ router.post("/login", (req,res) => {
                         if(isMatched==true)
                         {
                             req.session.user=user;
-                            res.redirect("/dashboard");
+                            res.redirect("/products/list");
                         }
                         //no match
                         else
@@ -202,7 +202,7 @@ router.post("/login", (req,res) => {
 });
 
 // Handle logout
-router.get("/logout",(req,res)=>{
+router.get("/logout",isAuthenticated, (req,res)=>{
 
     // Cleanup cart
     cartModel.deleteMany({userid: req.session.user._id})

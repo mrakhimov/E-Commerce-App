@@ -109,14 +109,14 @@ router.put("/cart/:id", isAuthenticated, (req,res) => {
     if(!req.session.cart) {
         productsModel.findById(req.params.id)
         .then((product)=>{
-            product.price = product.price * Number(req.body.quantity);
+            product.price = (product.price * Number(req.body.quantity)).toFixed(2);;
             let newCart = {
                 products: [],
                 products_qty: [],
                 userid: req.session.user._id,
                 username : req.session.user.name,
                 useremail: req.session.user.email,
-                total_amount: product.price,
+                total_amount: product.price.toFixed(2),
                 total_items: Number(req.body.quantity) ,
             };
 
@@ -137,20 +137,24 @@ router.put("/cart/:id", isAuthenticated, (req,res) => {
     // Update existing cart
     else {
         let quantity_added_to_cart = Number(req.body.quantity);
-        let total_price_on_the_cart = 0;
-        let total_items_on_the_cart = 0;
+        let total_price_on_the_cart = 0.00;
+        let total_items_on_the_cart = 0.00;
         productsModel.findById(req.params.id)
         .then((product)=>{
-            let product_price = product.price;
+            let product_price = product.price.toFixed(2);
 
-            product.price = product_price * Number(req.body.quantity);
+            product.price = (product_price * Number(req.body.quantity)).toFixed(2);
 
             cartModel.findById(req.session.cart._id)
             .then((cart) => {
                 total_items_on_the_cart = cart.total_items;
                 total_items_on_the_cart += quantity_added_to_cart;
                 total_price_on_the_cart = cart.total_amount;
-                total_price_on_the_cart += (product_price * quantity_added_to_cart);
+                total_price_on_the_cart += product_price * quantity_added_to_cart;
+                total_price_on_the_cart = total_price_on_the_cart.toFixed(2);
+
+                console.log(total_price_on_the_cart);
+
                 cartModel.updateOne({_id:req.session.cart._id}, { 
                     $set: {  total_items: total_items_on_the_cart, total_amount: total_price_on_the_cart },
                     $push: { products: product, products_qty:quantity_added_to_cart}
@@ -168,15 +172,12 @@ router.put("/cart/:id", isAuthenticated, (req,res) => {
 
 router.get("/cart", isAuthenticated, (req,res) => {
     if(!req.session.cart || req.session.cart == null || req.session.cart == undefined) {
-        console.log("Entering get cart");
         const err = "Your cart is empty";
         res.render("cart", {
             err
         });
     }
     else {
-        console.log(req.session.cart);
-        console.log("Entering else cart");
         cartModel.findOne({userid: req.session.user._id})
         .then((cart)=>{
             let {products, products_qty, total_items, total_amount } = cart;
@@ -194,53 +195,44 @@ router.post("/checkout", isAuthenticated,(req,res) => {
     // Get items in the current cart
     cartModel.findOne({userid: req.session.user._id})
     .then((cart)=>{
-        var {products, products_qty, total_items, total_amount } = cart;
-       
-    })
-    .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
-    // SEND MAIL
-    const msg = {
-        to: req.session.user.email,
-        from: 'mokhinur.rakhimov@gmail.com',
-        subject: 'Order Summary',
-        text: 'Order Summary',
-        html: `
-            <h1> Thank you for shopping with us </h1>
-            <h2> Your Order Summary below <h2>
-            <table style="width:100%">
-                <tr>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <th>Total Price</th>
-                </tr>
-                <tr>
-                    <td>Jill</td>
-                    <td>Smith</td>
-                    <td>50</td>
-                </tr>
-                <tr>
-                    <td>Eve</td>
-                    <td>Jackson</td>
-                    <td>94</td>
-                </tr>
-            </table>
-        `
-      };
-      sgMail.send(msg)
-      .then ( ()=> {
-             // Cleanup cart
-            cartModel.deleteMany({userid: req.session.user._id})
-            .then ( () => {
-                req.session.cart = null;
-                req.session.save();
-            })
-            .catch(err=>console.log(`Error happened when deleting data from the database :${err}`));;
+        let {products, products_qty, total_items, total_amount } = cart;
+        
+       // Compose html
+        let html = "<h3>Your Order Summary</h3><br><br>";
+        products.forEach((item,i)=> {
+            html += "Product Name: " + item.name + "<br>";
+            html +="Quantity: " + products_qty[i] + "<br>";
+            html +="Total Price: $" + item.price + "<br><br>";
+        });
+        html +="<b>Total Items: " + total_items + "</b><br>";
+        html +="<b>Order Total: $" + total_amount + "</b><br>";
+        console.log(html);
+        // SEND MAIL
+        const msg = {
+            to: req.session.user.email,
+            from: 'mokhinur.rakhimov@gmail.com',
+            subject: 'Order Summary',
+            text: 'Order Summary',
+            html: html
+        };
+        sgMail.send(msg)
+        .then ( ()=> {
+                // Cleanup cart
+                cartModel.deleteMany({userid: req.session.user._id})
+                .then ( () => {
+                    req.session.cart = null;
+                    req.session.save();
+                })
+                .catch(err=>console.log(`Error happened when deleting data from the database :${err}`));;
 
-            res.render("checkout", {success: "Thank you for shopping with us. An email has been sent with order details"});
-      })
-      .catch(err => {
-          console.log(`Error on sending email: ${err}`);
-      })         
+                res.render("checkout", {success: "Thank you for shopping with us. An email has been sent with order details"});
+        })
+        .catch(err => {
+            console.log(`Error on sending email: ${err}`);
+        })         
+        })
+        .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+    
 });
 
 router.get("/checkout", isAuthenticated, (req,res) => {
