@@ -1,7 +1,10 @@
 <section id="cart">
-    <h1>Shopping Cart</h1>
-    <h2 class="errorMessage">{{err}}</h2>
+    
     <div class="container">
+        <br>
+    <h1>Shopping Cart</h1>
+    <br>
+    <h2 class="errorMessage">{{err}}</h2>
                 {{#if products}}
                     {{#each products}}
                         <div class="products-box">
@@ -25,13 +28,14 @@
                     <div class="form-group">
                         <form method="POST" action="/checkout">
                             <p>
-                                <input class="form-control form-control-lg" type="submit" value="Place an Order">
+                                <input class="btn btn-danger btn-lg"  type="submit" value="Place an Order">
                             </p>
                         </form>
                     </div>
-                </div>
+                
                 {{else}}
-                    <a href="/products/list"><button type="button">Shop Now</button></a>
+                <br>
+                    <a  class="btn btn-danger btn-lg" href="/products/list">Shop Now</a>
                 {{/if}}
-        </div>
+    </div>
 </section>
