@@ -167,13 +167,16 @@ router.put("/cart/:id", isAuthenticated, (req,res) => {
 });
 
 router.get("/cart", isAuthenticated, (req,res) => {
-    if(!req.session.cart) {
+    if(!req.session.cart || req.session.cart == null || req.session.cart == undefined) {
+        console.log("Entering get cart");
         const err = "Your cart is empty";
         res.render("cart", {
             err
         });
     }
     else {
+        console.log(req.session.cart);
+        console.log("Entering else cart");
         cartModel.findOne({userid: req.session.user._id})
         .then((cart)=>{
             let {products, products_qty, total_items, total_amount } = cart;
@@ -225,13 +228,11 @@ router.post("/checkout", isAuthenticated,(req,res) => {
       };
       sgMail.send(msg)
       .then ( ()=> {
-            console.log("Sent email" + "\n");
              // Cleanup cart
             cartModel.deleteMany({userid: req.session.user._id})
             .then ( () => {
-                console.log("Deleted Cart");
                 req.session.cart = null;
-                console.log("Cart Session Deleted");
+                req.session.save();
             })
             .catch(err=>console.log(`Error happened when deleting data from the database :${err}`));;
 
