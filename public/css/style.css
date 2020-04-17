@@ -90,7 +90,7 @@ body h1 {
 
     /*========================> Categories <=========================*/
 
-  h2 {
+  .categories h2 {
     padding-left: 20px;
   }
   .categories {
@@ -141,39 +141,39 @@ body h1 {
     font-weight: 300;
   }
 
-  .bestsellers span, .products-class span{
-    display: block;
-    text-align: center;
-  }
 
-  #price {
-    text-align: center;
-  }
 
-#bestsellers_id, #products  {
-    position: relative;
-      min-height: 80vh;
-  }
+
 
  /*========================> Products <=========================*/
  .products-class {
-  padding-top: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+    padding-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+#products select {
+  margin: 25px;
+  width: auto;
+}
+#products input {
+  margin: 25px;
+  width: auto;
 }
 
 
 
-/*========================> registration <=========================*/
-form {
+
+/*========================> registration/login <=========================*/
+#register form, #login form {
   background: #fff;
   padding: 4em 4em 2em;
-  max-width: 400px;
+  max-width: 600px;
   margin: 50px auto 0;
   box-shadow: 0 0 1em #222;
   border-radius: 2px;
 }
-form h2 {
+#register form h2, #login form h2 {
   margin: 0 0 50px 0;
   padding: 10px;
   text-align: center;
@@ -181,36 +181,36 @@ form h2 {
   color: #1d1d1d;
   border-bottom: solid 1px #e5e5e5;
 }
-form p {
+#register form p, #login form p {
   margin: 0 0 3em 0;
   position: relative;
 }
-form input {
+#register form input, #login form input  {
   display: block;
   box-sizing: border-box;
   width: 100%;
   outline: none;
   margin: 0;
 }
-form input[type="text"],
-form input[type="password"] {
+#register form input[type="text"], #login form input[type="text"],
+#register form input[type="password"] , #login form input[type="password"] {
   background: #fff;
   border: 1px solid #dbdbdb;
   font-size: 1.6em;
   padding: .8em .5em;
   border-radius: 2px;
 }
-form input[type="text"]:focus,
-form input[type="password"]:focus {
+#register form input[type="text"]:focus, #login form input[type="text"]:focus,
+#register form input[type="password"]:focus , #login form input[type="password"]:focus {
   background: #fff;
 }
-form span {
+#register form span, #login form span {
   display: block;
   background: #F9A5A5;
   padding: 2px 5px;
   color: #666;
 }
-form input[type="submit"] {
+#register form input[type="submit"], #login form input[type="submit"] {
   background: #ff546d;
   box-shadow: 0 3px 0 0 rgba(123, 163, 73, 0.7);
   border-radius: 2px;
@@ -225,7 +225,7 @@ form input[type="submit"] {
   padding: .8em 0;
   text-shadow: 0 1px #ffbac4;
 }
-form input[type="submit"]:hover {
+#register form input[type="submit"]:hover, #login form input[type="submit"]:hover {
   background: ffbac4;
   text-shadow: 0 1px 3px #ffbac4;
 }
@@ -243,20 +243,21 @@ form label {
   -webkit-transition: color 0.3s, top 0.3s, background-color 0.8s;
   transition: color 0.3s, top 0.3s, background-color 0.8s;
 }
-form label.floatLabel {
+#register form label.floatLabel, #login form label.floatLabel {
   top: -11px;
   background-color: rgba(255, 255, 255, 0.8);
 }
-  /*========================> Error Message <=========================*/
-.errorMessage {
-  color: red;
-}
 
-  /*========================> Dashboard <=========================*/
-#dashboard h1{
-  font-size: 100px;
+  /*========================> Details <=========================*/
+  #details {
+    padding-top: 50px;
+  }
+  #details select {
+  width: auto;
 }
-
+#details input {
+  width: auto;
+}
 
 /*========================> Footer <=========================*/
 footer {

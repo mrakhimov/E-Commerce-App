@@ -1,7 +1,7 @@
-<section id="checkout">
+<section id="cart">
     <h1>Shopping Cart</h1>
-    <h2>{{err}}</h2>
-  
+    <h2 class="errorMessage">{{err}}</h2>
+    
     {{#if products}}
             {{#each products}}
                 <div class="products-box">
@@ -23,9 +23,9 @@
                 <input type="submit" value="Place an Order">
              </p>
          </form>
+    
+    {{else}}
+        <a href="/products/list"><button type="button">Shop Now</button></a>
     {{/if}}
-
-    
-    
 </section>
 
