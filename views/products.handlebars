@@ -1,17 +1,15 @@
 <section id="products">
         <h1>Inventory</h1>
+        
         <div class="form-group">
           <form method="POST" action="/products/list">
-            <p>
-                <label for="category" class="floatLabel">Search By</label>
-                <select class="form-control form-control-lg" id="category" name="category">
-                        <option selected value="all">All</option>
-                        <option name="Women's Fashion" value="Women's Fashion">Women's Fashion</option>
-                        <option name="Beauty" value="Beauty">Beauty</option>
-                        <option name="Jewellery" value="Jewellery">Jewellery</option>
-                        <option name="Watches" value="Watches">Watches</option>
-                </select>
-            <p>
+            <select class="form-control form-control-lg" id="category" name="category">
+                    <option selected value="all">All</option>
+                    <option name="Women's Fashion" value="Women's Fashion">Women's Fashion</option>
+                    <option name="Beauty" value="Beauty">Beauty</option>
+                    <option name="Jewellery" value="Jewellery">Jewellery</option>
+                    <option name="Watches" value="Watches">Watches</option>
+            </select>
                 <input class="form-control form-control-lg" type="submit" value="Search">
             </form> <br><br>
         </div>

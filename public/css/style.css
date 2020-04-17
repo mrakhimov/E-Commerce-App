@@ -249,13 +249,13 @@ form label {
 }
 
   /*========================> Details <=========================*/
-  #details {
+  #details,#clerkDashboard {
     padding-top: 50px;
   }
-  #details select {
+  #details select, #clerkDashboard select {
   width: auto;
 }
-#details input {
+#details input, #clerkDashboard input {
   width: auto;
 }
 
