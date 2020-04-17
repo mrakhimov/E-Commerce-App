@@ -1,4 +1,4 @@
-#Web322 Project - e-commerce app
+# Web322 Project - e-commerce app
 
 ```js
 // Name: Moonie Rakhimov
@@ -68,7 +68,7 @@
 
     [DONE]User’s must be able to view all their products in their shopping cart 
     and the shopping cart must list all products added, the quantity amount of each product and their total amount.
-    
+
     [DONE]When the user clicks the “Place Order” button, the application must “clear” the shopping cart and send email with the entire order information
     
 ## Look and Feel	
