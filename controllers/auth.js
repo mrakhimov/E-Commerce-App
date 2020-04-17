@@ -204,7 +204,6 @@ router.post("/login", (req,res) => {
 // Handle logout
 router.get("/logout",(req,res)=>{
 
-
     // Cleanup cart
     cartModel.deleteMany({userid: req.session.user._id})
     .catch(err=>console.log(`Error happened when deleting data from the database :${err}`));

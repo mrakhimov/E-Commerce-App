@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const isAuthenticated = require("../middleware/authentication");
 const dashBoardLoader = require("../middleware/authorization");
-
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SEND_GRID_API_KEY);
 //import categories and products
 
 const categoryModel = require("../model/categories");
@@ -184,6 +185,67 @@ router.get("/cart", isAuthenticated, (req,res) => {
     }
     
 });
+
+// Place Order
+router.post("/checkout", isAuthenticated,(req,res) => {
+    // Get items in the current cart
+    cartModel.findOne({userid: req.session.user._id})
+    .then((cart)=>{
+        var {products, products_qty, total_items, total_amount } = cart;
+       
+    })
+    .catch(err=>console.log(`Error happened when pulling from the database :${err}`));
+    // SEND MAIL
+    const msg = {
+        to: req.session.user.email,
+        from: 'mokhinur.rakhimov@gmail.com',
+        subject: 'Order Summary',
+        text: 'Order Summary',
+        html: `
+            <h1> Thank you for shopping with us </h1>
+            <h2> Your Order Summary below <h2>
+            <table style="width:100%">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                </tr>
+                <tr>
+                    <td>Jill</td>
+                    <td>Smith</td>
+                    <td>50</td>
+                </tr>
+                <tr>
+                    <td>Eve</td>
+                    <td>Jackson</td>
+                    <td>94</td>
+                </tr>
+            </table>
+        `
+      };
+      sgMail.send(msg)
+      .then ( ()=> {
+            console.log("Sent email" + "\n");
+             // Cleanup cart
+            cartModel.deleteMany({userid: req.session.user._id})
+            .then ( () => {
+                console.log("Deleted Cart");
+                req.session.cart = null;
+                console.log("Cart Session Deleted");
+            })
+            .catch(err=>console.log(`Error happened when deleting data from the database :${err}`));;
+
+            res.render("checkout", {success: "Thank you for shopping with us. An email has been sent with order details"});
+      })
+      .catch(err => {
+          console.log(`Error on sending email: ${err}`);
+      })         
+});
+
+router.get("/checkout", isAuthenticated, (req,res) => {
+    res.render("checkout");
+});
+
 
 
 

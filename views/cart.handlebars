@@ -18,7 +18,11 @@
         <h3> Total items: {{total_items}}</h3>
         <h3> Your total is : {{total_amount}}</h3>
 
-        <a href="#"><button>Place your Order</button></a>
+         <form method="POST" action="/checkout">
+             <p>
+                <input type="submit" value="Place an Order">
+             </p>
+         </form>
     {{/if}}
 
     
