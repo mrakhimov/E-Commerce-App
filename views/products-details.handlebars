@@ -1,14 +1,19 @@
 <section id="details">
-
     <div class="products-box">
         <p>{{this.name}}</p>
         <h5>{{this.category}}</h5>
         <h6>{{this.description}}</h6>
         <span>
-            <a href="{{this.link}}"><img src="/img/{{this.thumb}}" width="300px" height="300px"></a>
+            <a href="{{this.link}}"><img src="/img/{{this.thumb}}" width="500px" height="500px"></a>
         </span>
         <p id="price">${{this.price}}</p>
-        
+        <p id="quantity">In Stock: {{this.quantity}}</p>
+         <select name="quantity">
+             {{#each qty}}
+                <label class="floatLabel">Quantity</label><br>
+                <option value={{this}}>{{this}}</option>
+            {{/each}}
+        </select>
+        <button>Add to cart</button>
     </div>
-
 </section>
