@@ -152,9 +152,6 @@ router.put("/cart/:id", isAuthenticated, (req,res) => {
                 total_price_on_the_cart = cart.total_amount;
                 total_price_on_the_cart += product_price * quantity_added_to_cart;
                 total_price_on_the_cart = total_price_on_the_cart.toFixed(2);
-
-                console.log(total_price_on_the_cart);
-
                 cartModel.updateOne({_id:req.session.cart._id}, { 
                     $set: {  total_items: total_items_on_the_cart, total_amount: total_price_on_the_cart },
                     $push: { products: product, products_qty:quantity_added_to_cart}
@@ -206,7 +203,6 @@ router.post("/checkout", isAuthenticated,(req,res) => {
         });
         html +="<b>Total Items: " + total_items + "</b><br>";
         html +="<b>Order Total: $" + total_amount + "</b><br>";
-        console.log(html);
         // SEND MAIL
         const msg = {
             to: req.session.user.email,
